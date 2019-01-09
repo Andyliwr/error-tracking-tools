@@ -1,6 +1,11 @@
 # error-tracking-tools
 小迪版错误跟踪工具
 
+### 安装项目依赖
+```
+pip install flask-sqlalchemy
+```
+
 ### 运行程序
 在 Linux and Mac 下：
 ```

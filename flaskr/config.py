@@ -1,20 +1,28 @@
 # -*- coding: utf-8 -*-
 # Application configuration
+import os
+from os import getenv
 
 
-class BaseConfig():
-    SECRET_KEY = 'dev'
+class Config():
+    # get attribute
+    WOCAO = True
 
+class DevelopmentConfig(Config):
+    DEBUG = True
+    KKK = True
 
-class DevelopmentConfig(BaseConfig):
-    MONGO_HOST = '127.0.0.1'
-    MONGO_PORT = '27017'
-    MONGO_USER = ''
-    MONGO_PASS = ''
+class ProductionConfig(Config):
+    DEBUG = False
 
+class TestingConfig(Config):
+    TESTING = True
 
-class ProductionConfig(BaseConfig):
-    MONGO_HOST = '127.0.0.1'
-    MONGO_PORT = '27017'
-    MONGO_USER = ''
-    MONGO_PASS = ''
+mapping = {
+    'development': DevelopmentConfig,
+    'testing': TestingConfig,
+    'production': ProductionConfig
+}
+
+FLASK_ENV = os.environ.get('FLASK_ENV', 'default').lower()
+config = mapping[FLASK_ENV]
