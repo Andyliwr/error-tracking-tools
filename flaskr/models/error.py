@@ -2,11 +2,11 @@ from index import db
 import datetime
 
 
-class Project(db.Model):
-    __tablename__ = 'projects'
+class Error(db.Model):
     id = db.Column(db.Interge, primary_key=True)
-    owner = db.Column(db.Interge, db.ForeignKey('users.id'))
+    owner = db.Column(db.Interge, db.ForeignKey('projects.id'))
+    level = db.Column(db.Enum('error', 'danger', 'warning', 'info', 'debug'))
     name = db.Column(db.String(50))
     des = db.Column(db.String(100))
-    platform = db.Column(db.Enum('nodejs', 'javascript'))
+    other = db.Column(db.Text(100))
     create_time = db.Column(db.Date(), default=datetime.datetime.now())
