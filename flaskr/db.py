@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import sqlite3
-from flask_sqlalchemy import SQLAlchemy
 
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+from flask_sqlalchemy import SQLAlchemy
 
 
 def init_db():
@@ -20,9 +20,7 @@ def init_app(app):
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES)
+        g.db = SQLAlchemy(app)
         g.db.row_factory = sqlite3.Row
 
     return g.db
