@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # Application configuration
 import os
-from os import getenv
 
 
 class Config():
     # get attribute
     WOCAO = True
+
 
 class DevelopmentConfig(Config):
     DB_HOST = 'sql12.freemysqlhosting.net'
@@ -14,14 +14,19 @@ class DevelopmentConfig(Config):
     DB_USERNAME = 'sql12273368'
     DB_PASSWORD = 'qjeYT8Z4R1'
     DB_NAME = 'sql12273368'
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
-    KKK = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://{}:{}@{}:{}/{}'.format(
+        DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME)
+    print(SQLALCHEMY_DATABASE_URI)
+
 
 class ProductionConfig(Config):
     DEBUG = False
 
+
 class TestingConfig(Config):
     TESTING = True
+
 
 mapping = {
     'development': DevelopmentConfig,

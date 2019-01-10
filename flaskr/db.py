@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
-import sqlite3
-
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
 from flask_sqlalchemy import SQLAlchemy
+# from flaskr.models import User, Project, Error
 
 
 def init_db():
+    print('init')
     db = get_db()
-    with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+    db.drop_all()
+    db.create_all()
 
 
 def init_app(app):
@@ -21,16 +21,11 @@ def init_app(app):
 def get_db():
     if 'db' not in g:
         g.db = SQLAlchemy(current_app)
-        g.db.row_factory = sqlite3.Row
-
     return g.db
 
 
 def close_db(e=None):
-    db = g.pop('db', None)
-
-    if db is not None:
-        db.close()
+    print('close db')
 
 
 @click.command('init-db')
