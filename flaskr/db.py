@@ -20,7 +20,7 @@ def init_app(app):
 
 def get_db():
     if 'db' not in g:
-        g.db = SQLAlchemy(app)
+        g.db = SQLAlchemy(current_app)
         g.db.row_factory = sqlite3.Row
 
     return g.db
