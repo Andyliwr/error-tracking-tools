@@ -12,15 +12,27 @@ const server = new ApolloServer({
   resolvers,
   context: async () => ({
     models,
-    me: await models.User.findByNameOrEmail('Andyliwr') // The function is invoked every time a request hits your GraphQL API
-  })
+    me: await models.User.findByNameOrEmail('andyliwr') // The function is invoked every time a request hits your GraphQL API
+  }),
+  // format error message by yourself
+  formatError: error => {
+    // remove the internal sequelize error message
+    // leave only the important validation error
+    const message = error.message
+      .replace('SequelizeValidationError: ', '')
+      .replace('Validation error: ', '')
+    return {
+      ...error,
+      message
+    }
+  }
 })
  
 const app = express()
 app.use(cors())
 server.applyMiddleware({ app, path: '/graphql' })
 
-const eraseDatabaseOnSync = false // drop database when application started
+const eraseDatabaseOnSync = true // drop database when application started
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {
@@ -34,7 +46,9 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
 // create testing user and message
 async function createUserWithMessage() {
   await models.User.create({
-    username: 'Andyliwr',
+    username: 'andyliwr',
+    email: 'andyliwr@outlook.com',
+    password: '12345678',
     messages: [
       {
         text: 'Hello, GraphQL!'

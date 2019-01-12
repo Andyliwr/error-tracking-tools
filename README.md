@@ -1,6 +1,10 @@
 # error-tracking-tools
 小迪版错误跟踪工具
 
+[调试地址](http://localhost:4000/graphql)
+[学习文档](https://www.robinwieruch.de/graphql-apollo-server-tutorial/)
+[sequelize文档](https://github.com/demopark/sequelize-docs-Zh-CN/blob/76b940a8a6/querying.md)
+
 ### query
 ```
 {
@@ -30,7 +34,12 @@
 
 ### mutation
 ```
-
+mutation {
+  createMessage(text: "") {
+    id,
+    text
+  }
+}
 ```
 
 ### postgresql启动和停止
@@ -67,3 +76,8 @@ andyliwr=# \q
 ```
 psql -U postgres -d test
 ```
+
+### 心得体会
+1. models定义的是数据以什么样的格式存储到数据库中，schema定义的是客户端能查到怎样格式的数据，并非数据库中的所有字段客户端都能查到，比如password
+2. validate的机制是graphql的一大优势，graphql会将数据库存储时发生的错误、用户主动抛出的错误、或者程序执行的错误都格式化成JSON格式返回给客户端，这就方便客户端对各种错误做出响应
+3. 

@@ -1,5 +1,3 @@
-import uuid from 'uuid'
-
 // Provide resolver functions for your schema fields
 export default {
   Query: {
@@ -16,6 +14,12 @@ export default {
         text,
         userId: me.id
       })
+      // define you owner error message, graphql will transfrom it
+      // try {
+      //   // do something
+      // } catch(err) {
+      //   throw new Error('you owner error message')
+      // }
     },
     deleteMessage: async (parent, { id }, { me, models }) => {
       return await models.Message.destroy({
