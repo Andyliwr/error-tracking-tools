@@ -1,5 +1,5 @@
-import { gql } from 'apollo-server-express';
-import { mergeTypes } from 'merge-graphql-schemas';
+import { gql } from 'apollo-server-express'
+import { mergeTypes } from 'merge-graphql-schemas'
 
 import userSchema from './user'
 import messageSchema from './message'
@@ -19,4 +19,4 @@ const linkSchema = gql`
   }
 `
 
-export default mergeTypes([ linkSchema, userSchema, messageSchema ], { all: true })
+export default mergeTypes([linkSchema, userSchema, messageSchema], { all: true })

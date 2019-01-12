@@ -1,30 +1,32 @@
 // Provide resolver functions for your schema fields
 export default {
   Query: {
-    me: (parent, args, {me}) => {
-      return me
+    me: async (parent, args, { me, models }) => {
+      return await models.User.findByPK(me.id)
     },
-    user: (parent, args, context, info) => {
+    user: async (parent, args, context, info) => {
       /**
        * parent: always returns the previously resolved field
        * args: parameters for detail query
        * content: save global data or user auth data
        * info: gives you internal information about the GraphQL request, used for debugging, error handling
        */
-      return context.models.users[args.id]
+      return await context.models.findByPK(args.id)
     },
-    users: (parent, args, {models}) => {
-      return Object.values(models.users) // return all enumerable key value of users
+    users: async (parent, args, { models }) => {
+      return await models.User.findAll() // return all enumerable key value of users
     }
   },
   User: {
     // new resolves to fromat some filed of user, user equal parent
-    username: user => { 
+    username: user => {
       return 'This is ' + user.username
     },
-    messages: (user, args, {models}) => {
-      return Object.values(models.messages).filter(item => {
-        return item.userid === user.id
+    messages: async (user, args, { models }) => {
+      return await models.Message.findAll({
+        where: {
+          userId: user.id
+        }
       })
     }
   }
