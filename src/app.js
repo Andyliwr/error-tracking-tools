@@ -12,7 +12,8 @@ const server = new ApolloServer({
   resolvers,
   context: async () => ({
     models,
-    me: await models.User.findByNameOrEmail('andyliwr') // The function is invoked every time a request hits your GraphQL API
+    me: await models.User.findByLogin('andyliwr'), // The function is invoked every time a request hits your GraphQL API
+    secret: config.jwt_token_secret
   }),
   // format error message by yourself
   formatError: error => {
@@ -32,7 +33,7 @@ const app = express()
 app.use(cors())
 server.applyMiddleware({ app, path: '/graphql' })
 
-const eraseDatabaseOnSync = true // drop database when application started
+const eraseDatabaseOnSync = false // drop database when application started
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {

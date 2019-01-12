@@ -1,3 +1,11 @@
+import jwt from 'jsonwebtoken'
+import { AuthenticationError, UserInputError } from 'apollo-server-express'
+
+const createToken = async (user, secret, expiresIn) => {
+  const { id, email, username } = user;
+  return await jwt.sign({ id, email, username }, secret, { expiresIn })
+}
+
 // Provide resolver functions for your schema fields
 export default {
   Query: {
@@ -18,6 +26,30 @@ export default {
     },
     users: async (parent, args, { models }) => {
       return await models.User.findAll() // return all enumerable key value of users
+    }
+  },
+  Mutation: {
+    signUp: async (parent, { username, email, password }, { models, secret }) => {
+      const user = await models.User.create({
+        username,
+        email,
+        password
+      })
+
+      return { token: createToken(user, secret, '2h') }
+    },
+    signIn: async (parent, { login, password }, { models, secret }) => {
+      const user = await models.User.findByLogin(login)
+      if (!user) {
+        throw new UserInputError('用户名或邮箱错误')
+      }
+
+      const isValid = await user.validatePassword(password)
+      if (!isValid) {
+        throw new AuthenticationError('密码错误')
+      }
+
+      return { token: createToken(user, secret, '2h') }
     }
   },
   User: {

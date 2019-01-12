@@ -1,3 +1,5 @@
+import bcrypt from 'bcrypt'
+
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
     username: {
@@ -32,12 +34,31 @@ const user = (sequelize, DataTypes) => {
     User.hasMany(models.Message, { onDelete: 'CASCADE' })
   }
 
+  // define a hook function that is executed every time a user entity is created
+  // use bcrypt to hash user password
+  User.beforeCreate(async user => {
+    user.password = await user.generatePasswordHash()
+  })
+
+  // generatePasswordHash added to the user’s prototype chain. so the instance of User can call it
+  User.prototype.generatePasswordHash = async function() {
+    const saltRounds = 12
+    return await bcrypt.hash(this.password, saltRounds)
+  }
+
+  User.prototype.validatePassword = async function(password) {
+    return await bcrypt.compare(password, this.password)
+  }
+
   // find user by name or email
   // define a database method
-  User.findByNameOrEmail = async nameOrEmail => {
+  User.findByLogin = async nameOrEmail => {
     return await User.findOne({
       where: {
-        username: nameOrEmail
+        $or: {
+          username: nameOrEmail,
+          email: nameOrEmail
+        }
       }
     })
   }

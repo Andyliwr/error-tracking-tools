@@ -13,4 +13,21 @@ export default gql`
     email: String!
     messages: [Message!]
   }
+
+  type Token {
+    token: String!
+  }
+
+  type Mutation {
+    signUp(
+      username: String!
+      email: String!
+      password: String!
+    ): Token!
+
+    signIn(
+      login: String!,
+      password: String!
+    ): Token!
+  }
 `
