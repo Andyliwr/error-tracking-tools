@@ -2,7 +2,7 @@
 export default {
   Query: {
     me: async (parent, args, { me, models }) => {
-      return await models.User.findByPK(me.id)
+      return await models.User.findById(me.id)
     },
     user: async (parent, args, context, info) => {
       /**
@@ -11,7 +11,7 @@ export default {
        * content: save global data or user auth data
        * info: gives you internal information about the GraphQL request, used for debugging, error handling
        */
-      return await context.models.findByPK(args.id)
+      return await context.models.findById(args.id)
     },
     users: async (parent, args, { models }) => {
       return await models.User.findAll() // return all enumerable key value of users

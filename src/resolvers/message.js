@@ -4,7 +4,7 @@ import uuid from 'uuid'
 export default {
   Query: {
     message: async (parent, { id }, { models }) => {
-      return await models.Message.findByPK(id)
+      return await models.Message.findById(id)
     },
     messages: async (parent, args, { models }) => {
       return await models.Message.findAll()
@@ -27,7 +27,7 @@ export default {
   },
   Message: {
     user: (message, args, { models }) => {
-      return models.User.findByPK(message.userId)
+      return models.User.findById(message.userId)
     }
   }
 }

@@ -15,7 +15,7 @@ const user = (sequelize, DataTypes) => {
   User.findByNameOrEmail = async nameOrEmail => {
     return await User.findOne({
       where: {
-        $or: [{ username: nameOrEmail }, { email: nameOrEmail }]
+        username: nameOrEmail
       }
     })
   }

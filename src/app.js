@@ -10,20 +10,22 @@ import config from './config'
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: {
+  context: async () => ({
     models,
-    me: models.User.findByNameOrEmail('Andyliwr')
-  }
+    me: await models.User.findByNameOrEmail('Andyliwr') // The function is invoked every time a request hits your GraphQL API
+  })
 })
  
 const app = express()
 app.use(cors())
 server.applyMiddleware({ app, path: '/graphql' })
 
-const eraseDatabaseOnSync = true // drop database when application started
+const eraseDatabaseOnSync = false // drop database when application started
 
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-  if (eraseDatabaseOnSync) createUserWithMessage()
+  if (eraseDatabaseOnSync) {
+    createUserWithMessage()
+  }
   app.listen({ port: config.port || 4000 }, () =>
     console.log(`🚀 Server ready at http://localhost:${4000}${server.graphqlPath}`)
   )
