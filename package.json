@@ -1,0 +1,40 @@
+{
+  "name": "error-tracking-tools",
+  "version": "1.0.0",
+  "description": "小迪版错误跟踪工具",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon src/app.js --exec babel-node --presets es2015,stage-2",
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andyliwr/error-tracking-tools.git"
+  },
+  "keywords": [
+    "error",
+    "tracking"
+  ],
+  "author": "andyliwr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Andyliwr/error-tracking-tools/issues"
+  },
+  "homepage": "https://github.com/Andyliwr/error-tracking-tools#readme",
+  "dependencies": {
+    "apollo-server-express": "^2.3.1",
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
+    "express": "^4.16.4",
+    "graphql": "^14.0.2",
+    "graphql-tools": "^4.0.3",
+    "merge-graphql-schemas": "^1.5.8",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "nodemon": "^1.18.9"
+  }
+}
