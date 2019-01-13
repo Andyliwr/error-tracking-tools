@@ -8,8 +8,15 @@ export default {
     message: async (parent, { id }, { models }) => {
       return await models.Message.findById(id)
     },
-    messages: async (parent, args, { models }) => {
-      return await models.Message.findAll()
+    messages: async (parent, { cursor = 0, limit = 10 }, { models }) => {
+      // use curse based paganation
+      return await models.Message.findAll({
+        order: [['createdAt', 'DESC']],
+        limit,
+        where: cursor ? {
+          createdAt: { $lt: cursor }
+        } : null
+      })
     }
   },
   Mutation: {

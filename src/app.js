@@ -68,7 +68,8 @@ async function createUserWithMessage() {
       role: 'admin',
       messages: [
         {
-          text: 'Hello, GraphQL!'
+          text: 'Hello, GraphQL!',
+          createdAt: new Date()
         }
       ]
     },

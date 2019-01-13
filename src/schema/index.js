@@ -5,7 +5,10 @@ import userSchema from './user'
 import messageSchema from './message'
 
 // The linkSchema defines all types shared within the schemas.
+// GraphQL Custom Scalars
 const linkSchema = gql`
+  scalar Date  
+
   type Query {
     _: Boolean
   }
