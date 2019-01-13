@@ -1,3 +1,7 @@
+import { ForbiddenError } from 'apollo-server-express'
+import { combineResolvers } from 'graphql-resolvers'
+import { isAuthenticated, isMessageOwner } from './authorizaion'
+
 // Provide resolver functions for your schema fields
 export default {
   Query: {
@@ -9,7 +13,11 @@ export default {
     }
   },
   Mutation: {
-    createMessage: async (parent, { text }, { me, models }) => {
+    // add authentization middleware to createMessage
+    createMessage: combineResolvers(isAuthenticated, async (parent, { text }, { me, models }) => {
+      if (!me) {
+        throw new ForbiddenError('请先登录')
+      }
       return await models.Message.create({
         text,
         userId: me.id
@@ -20,14 +28,14 @@ export default {
       // } catch(err) {
       //   throw new Error('you owner error message')
       // }
-    },
-    deleteMessage: async (parent, { id }, { me, models }) => {
+    }),
+    deleteMessage: combineResolvers(isAuthenticated, isMessageOwner, async (parent, { id }, { me, models }) => {
       return await models.Message.destroy({
         where: {
           id
         }
       })
-    }
+    })
   },
   Message: {
     user: (message, args, { models }) => {

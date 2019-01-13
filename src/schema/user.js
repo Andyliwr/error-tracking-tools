@@ -11,6 +11,7 @@ export default gql`
     id: ID!
     username: String!
     email: String!
+    role: String!
     messages: [Message!]
   }
 
@@ -29,5 +30,7 @@ export default gql`
       login: String!,
       password: String!
     ): Token!
+
+    deleteUser(id: ID!): Boolean
   }
 `

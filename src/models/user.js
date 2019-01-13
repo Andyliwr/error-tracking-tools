@@ -26,6 +26,9 @@ const user = (sequelize, DataTypes) => {
         notEmpty: { args: true, msg: '密码必填' },
         len: { args: [7, 42], msg: '密码长度需要在7到42位之间' }
       }
+    },
+    role: {
+      type: DataTypes.STRING
     }
   })
 

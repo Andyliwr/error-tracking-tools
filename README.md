@@ -81,3 +81,5 @@ psql -U postgres -d test
 1. models定义的是数据以什么样的格式存储到数据库中，schema定义的是客户端能查到怎样格式的数据，并非数据库中的所有字段客户端都能查到，比如password
 2. validate的机制是graphql的一大优势，graphql会将数据库存储时发生的错误、用户主动抛出的错误、或者程序执行的错误都格式化成JSON格式返回给客户端，这就方便客户端对各种错误做出响应
 3. schema中返回类型只支持一个值，如果返回的是多个值，需要重新定义一个type来包含这些值
+4. 你可在resolve中通过对me的判断控制用户的权限，而可以使用resolver middleware --- graphql-resolvers
+5. graphql的权限认证有三种，第一种是Authorization base resolver protect(判断用户是否已经登录)，另一种是Permission base resolver protect(判断用户是否是数据的创建者)，还有一种是Role base resolver protect(基于角色的权限判断)
