@@ -86,3 +86,5 @@ psql -U postgres -d test
 6. Graphql的时间采用时间戳的形式展示，但是存入数据库的形式还是日期对象
 7. Graphql中创建分页的方式有两种，第一种：offset/limit-based，offset表示从何处开始查找数据，limit表示此次查找最多查找多少个。这种方式有两个缺陷，一个是当offset越来越大的时候查找数据所需要的时间也会越来越多，其次是在查找数据的同时删除offset之前的数据，会使得查询的结果混乱。另一种实现分页的方式是cursor-based，区别只是将offset换成了列表元素的id，称之为cursor，我们可以使用列表元素的createdAt作为cursor。
 8. Graphql的subscription理解：https://www.zcfy.cc/article/tutorial-graphql-subscriptions-server-side
+9. e2e测试不是针对一个测试单元或者一个组件，而是整个流程，所以每个测试用例都足够的简单明了
+10. 

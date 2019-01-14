@@ -24,7 +24,7 @@ export default {
        * content: save global data or user auth data
        * info: gives you internal information about the GraphQL request, used for debugging, error handling
        */
-      return await context.models.findById(args.id)
+      return await context.models.User.findById(args.id)
     },
     users: async (parent, args, { models }) => {
       return await models.User.findAll() // return all enumerable key value of users

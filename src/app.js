@@ -1,5 +1,6 @@
 import http from 'http'
 import express from 'express'
+import bodyParser from 'body-parser'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import { AuthenticationError, ApolloServer } from 'apollo-server-express'
@@ -24,6 +25,11 @@ const getMe = async req => {
 
 const app = express()
 app.use(cors())
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
+
 const httpServer = http.createServer(app)
 const server = new ApolloServer({
   typeDefs: schema,
@@ -61,8 +67,9 @@ server.applyMiddleware({ app, path: '/graphql' })
 
 const eraseDatabaseOnSync = false // drop database when application started
 
-sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
-  if (eraseDatabaseOnSync) {
+sequelize.sync({ force: eraseDatabaseOnSync || !!process.env.TEST_DATABASE }).then(async () => {
+  // in test mode, start application after clean at every times
+  if (eraseDatabaseOnSync || !!process.env.TEST_DATABASE) {
     createUserWithMessage()
   }
   httpServer.listen({ port: config.port || 4000 }, () => console.log(`🚀 Server ready at http://localhost:${4000}${server.graphqlPath}`))

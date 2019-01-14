@@ -39,7 +39,7 @@ const operatorsAliases = {
   $col: Op.col
 }
 
-const sequelize = new Sequelize(config.database_name, config.database_user, config.database_pass, {
+const sequelize = new Sequelize(process.env.TEST_DATABASE || config.database_name, config.database_user, config.database_pass, {
   dialect: 'postgres',
   operatorsAliases // use openration alias, just like Op.gt == $gt
 })
