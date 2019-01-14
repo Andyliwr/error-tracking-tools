@@ -1,3 +1,4 @@
+import http from 'http'
 import express from 'express'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
@@ -21,16 +22,26 @@ const getMe = async req => {
   }
 }
 
+const app = express()
+app.use(cors())
+const httpServer = http.createServer(app)
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  context: async ({ req }) => {
+  context: async ({ req, connection }) => {
     // The function is invoked every time a request hits your GraphQL API
-    const me = await getMe(req)
-    return {
-      models,
-      me,
-      secret: config.jwt_token_secret
+    // if it is subscription, only contains connection and no req
+    if (connection) {
+      return { models }
+    }
+    // if it is request, connection is undefined
+    if (req) {
+      const me = await getMe(req)
+      return {
+        models,
+        me,
+        secret: config.jwt_token_secret
+      }
     }
   },
   // format error message by yourself
@@ -45,8 +56,7 @@ const server = new ApolloServer({
   }
 })
 
-const app = express()
-app.use(cors())
+server.installSubscriptionHandlers(httpServer)
 server.applyMiddleware({ app, path: '/graphql' })
 
 const eraseDatabaseOnSync = false // drop database when application started
@@ -55,7 +65,7 @@ sequelize.sync({ force: eraseDatabaseOnSync }).then(async () => {
   if (eraseDatabaseOnSync) {
     createUserWithMessage()
   }
-  app.listen({ port: config.port || 4000 }, () => console.log(`🚀 Server ready at http://localhost:${4000}${server.graphqlPath}`))
+  httpServer.listen({ port: config.port || 4000 }, () => console.log(`🚀 Server ready at http://localhost:${4000}${server.graphqlPath}`))
 })
 
 // create testing user and message
