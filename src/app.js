@@ -3,11 +3,13 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
+import DataLoader from 'dataloader'
 import { AuthenticationError, ApolloServer } from 'apollo-server-express'
 
 import schema from './schema'
 import resolvers from './resolvers'
 import models, { sequelize } from './models'
+import loaders from './loaders'
 import config from './config'
 
 const getMe = async req => {
@@ -22,6 +24,9 @@ const getMe = async req => {
     }
   }
 }
+
+// dataloader
+const userLoader = new DataLoader(keys => loaders.user.batchUsers(keys, models))
 
 const app = express()
 app.use(cors())
@@ -38,7 +43,12 @@ const server = new ApolloServer({
     // The function is invoked every time a request hits your GraphQL API
     // if it is subscription, only contains connection and no req
     if (connection) {
-      return { models }
+      return {
+        models,
+        loaders: {
+          user: userLoader
+        }
+      }
     }
     // if it is request, connection is undefined
     if (req) {
@@ -46,7 +56,10 @@ const server = new ApolloServer({
       return {
         models,
         me,
-        secret: config.jwt_token_secret
+        secret: config.jwt_token_secret,
+        loaders: {
+          user: userLoader
+        }
       }
     }
   },

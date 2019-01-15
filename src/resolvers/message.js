@@ -67,8 +67,8 @@ export default {
     })
   },
   Message: {
-    user: (message, args, { models }) => {
-      return models.User.findById(message.userId)
+    user: async (message, args, { loaders }) => {
+      return await loaders.user.load(message.userId)
     }
   },
   // create message subscription

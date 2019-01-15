@@ -9,7 +9,9 @@
     "test": "mocha --require babel-polyfill --require babel-core/register 'src/**/*.spec.js'"
   },
   "nodemonConfig": {
-    "ignore": ["src/tests/*"]
+    "ignore": [
+      "src/tests/*"
+    ]
   },
   "repository": {
     "type": "git",
@@ -51,6 +53,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
+    "dataloader": "^1.4.0",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.9"
   }
