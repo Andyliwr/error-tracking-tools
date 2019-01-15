@@ -94,4 +94,21 @@ async function createUserWithMessage() {
       include: [models.Message]
     }
   )
+  await models.User.create(
+    {
+      username: 'andyliwr2',
+      email: 'andyliwr2@outlook.com',
+      password: '12345678',
+      role: 'user',
+      messages: [
+        {
+          text: 'I love you!',
+          createdAt: new Date()
+        }
+      ]
+    },
+    {
+      include: [models.Message]
+    }
+  )
 }

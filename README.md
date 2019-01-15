@@ -74,7 +74,7 @@ andyliwr=# \q
 ```
 使用用户postgresql登录
 ```
-psql -U postgres -d test
+psql -U test -d test
 ```
 
 ### 心得体会
